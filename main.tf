@@ -7,14 +7,10 @@ terraform {
   }
 }
 
-provider "google" {
-  project = var.gcp_project_id
-}
-
-variable "gcp_project_id" {}
+provider "google" {}
 
 resource "google_sql_database_instance" "postgres" {
-  name             = var.instance_name
+  name             = var.cloudsql_instance_name
   database_version = "POSTGRES_14"
   region           = "europe-west2"
 
@@ -22,7 +18,6 @@ resource "google_sql_database_instance" "postgres" {
     tier = "db-f1-micro"
   }
 }
-
 
 resource "random_id" "db_user" {
   byte_length = 8
@@ -38,6 +33,8 @@ resource "google_sql_user" "users" {
   password = random_id.db_pass.hex
 }
 
+variable "cloudsql_instance_name" {}
+
 output "postgres_user" {
   value = random_id.db_user.hex
 }
@@ -45,7 +42,6 @@ output "postgres_user" {
 output "postgres_password" {
     value = random_id.db_pass.hex
     sensitive = true
-
 }
 
 output "postgres_connection_name" {
