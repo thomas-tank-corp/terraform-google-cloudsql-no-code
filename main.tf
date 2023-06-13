@@ -15,7 +15,7 @@ resource "google_sql_database_instance" "postgres" {
   region           = "europe-west2"
 
   settings {
-    tier = "db-f1-micro"
+    tier = var.instance_size
   }
 }
 
@@ -34,6 +34,8 @@ resource "google_sql_user" "users" {
 }
 
 variable "cloudsql_instance_name" {}
+
+variable "instance_size" {}
 
 output "postgres_user" {
   value = random_id.db_user.hex
