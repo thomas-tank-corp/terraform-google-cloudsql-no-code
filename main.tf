@@ -10,7 +10,7 @@ terraform {
 provider "google" {}
 
 resource "google_sql_database_instance" "postgres" {
-  name             = var.cloudsql_instance_name
+  name             = "db-dev-${random_pet.name.id}"
   database_version = "POSTGRES_14"
   region           = "europe-west2"
 
@@ -36,9 +36,6 @@ resource "google_sql_user" "users" {
   password = random_id.db_pass.hex
 }
 
-variable "cloudsql_instance_name" {
-   default = "db-dev-${random_pet.name.id}"
-}
 
 variable "instance_size" {
    default = "db-f1-micro"
