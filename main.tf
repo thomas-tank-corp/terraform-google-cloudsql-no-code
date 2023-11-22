@@ -27,15 +27,23 @@ resource "random_id" "db_pass" {
   byte_length = 16
 }
 
+resource "random_pet" "name" {}
+
+
 resource "google_sql_user" "users" {
   name     = random_id.db_user.hex
   instance = google_sql_database_instance.postgres.name
   password = random_id.db_pass.hex
 }
 
-variable "cloudsql_instance_name" {}
+variable "cloudsql_instance_name" {
+   default = "db-dev-${random_pet.name.id}"
+}
 
-variable "instance_size" {}
+variable "instance_size" {
+   default = "db-f1-micro"
+}
+
 
 output "postgres_user" {
   value = random_id.db_user.hex
